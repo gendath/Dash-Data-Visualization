@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 
 data=pd.read_csv("avocado.csv", parse_dates=True)
-# data=data.query("type=='conventional' and region == 'Albany'")
 data.sort_values("Date",inplace=True)
 
 external_stylesheets = [
@@ -12,10 +11,20 @@ external_stylesheets = [
     "href":"https://fonts.googleapis.com/css2?"
     "family = Lato:wght@400;700&display=swap",
     "rel": "styesheet"
+  },
+  {
+    "href":"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+    "rel":"stylesheet"
   }
 ]
-app = Dash(__name__, external_stylesheets=external_stylesheets)
-app.title="Avocado Analytics: Because Real Python Said So!"
+
+external_scripts=[
+  {
+    "src":"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+  }
+]
+app = Dash(__name__, external_stylesheets=external_stylesheets,external_scripts=external_scripts)
+app.title="Avocado Analytics: Analysing Avocado Prices from 2015 - 2018"
 server =app.server
 @app.callback(
   [
@@ -29,8 +38,6 @@ server =app.server
       Input("date-range","end_date"),
       ]
       )
-
-
 def update_graphs(region,avocadoType,start_date,end_date):
   mask=((data.region == region) & (data.type==avocadoType)&(data.Date>start_date) & (data.Date < end_date))
   filtered_data = data.loc[mask,:]
@@ -104,8 +111,7 @@ regionDropdown=html.Div(children=[
         clearable=False,
         className="dropdown"
       )
-    ],
-    className="menu")
+    ],)
 
 avocadoTypeDropdown=html.Div(children=[
       html.Div(
@@ -122,8 +128,7 @@ avocadoTypeDropdown=html.Div(children=[
         searchable=False,
         className="dropdown"
       )
-    ],
-    className="menu")
+    ],)
 
 datePicker =html.Div(children=[
       html.Div(
@@ -137,17 +142,31 @@ datePicker =html.Div(children=[
         end_date = pd.to_datetime(data.Date.max()),
       ),
     ],
-    className="menu"
     )
 
+
+controls = html.Div(className="container",children=[
+  html.Div(className="row menu",children=[
+    html.Div(className="col",children=[
+      regionDropdown,
+
+    ]),
+    html.Div(className="col",children=[
+      avocadoTypeDropdown,
+
+    ]),
+    html.Div(className="col",children=[
+      datePicker,
+
+    ]),
+  ])
+])
 app.layout = html.Div(children=[
     html.Div(children=[
     html.H1(children="Avocado Analytics", className="header-title"),
     html.P(children="Analyze the behavior of avocado prices and the number of avocados sold in the US between 2015 and 2018", className="header-description")],
     className="header"),
-    regionDropdown,
-    avocadoTypeDropdown,
-    datePicker,
+    controls,
     html.Div(
       children=[
         html.Div(
@@ -156,7 +175,7 @@ app.layout = html.Div(children=[
           className="card"
         ),
       ],
-      className="wrapper"
+      className="wrapper row"
     ),
         html.Div(
       children=[
@@ -166,7 +185,7 @@ app.layout = html.Div(children=[
           className="card"
         ),
       ],
-      className="wrapper"
+      className="wrapper row"
     )
 ])
 

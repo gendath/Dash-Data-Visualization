@@ -40,26 +40,22 @@ body {
   margin-top: 32px;
 }
 
-.card {
+/* .card {
   margin-bottom: 24px;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
-}
+} */
 
 .menu {
-  height: 112px;
-  width: 912px;
-  display: flex;
-  justify-content: space-evenly;
   padding-top: 24px;
-  margin: -80px auto 0 auto;
+  margin: -40px auto 0 auto;
   background-color: #fff;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
 }
 
-.Select-control {
+/* .Select-control {
   width: 256px;
   height: 48px;
-}
+} */
 
 .Select--single > .Select-control .Select-value,
 .Select-placeholder {
